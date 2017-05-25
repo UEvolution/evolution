@@ -17,6 +17,11 @@
   },
   "homepage": "https://github.com/UEvolution/evolution#readme",
   "dependencies": {
-    "express": "^4.15.2"
+    "body-parser": "^1.17.2",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.15.2",
+    "express-session": "^1.15.3",
+    "multer": "^1.3.0",
+    "mysql": "^2.13.0"
   }
 }
