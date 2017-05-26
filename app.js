@@ -1,12 +1,13 @@
 var express = require('express')
 var app = express()
+var config = require('./config')
 var mysql = require('mysql')
 var bodyParser = require('body-parser')
 var multer = require('multer')
-var router = require('./router')
-var config = require('./config')
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
+var user = require('./routers/user')
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -26,52 +27,10 @@ app.use(session({
 	saveUninitialized: true
 }));
 
+app.use('/user', user)
 
-app.post('/login', function (req, res) {
-	console.log(req.body);
-	var user = {
-		name: "Chen-xy",
-		age: "22",
-		address: "bj"
-	}
-	req.session.user = user
-	res.json(user)
-})
-
-app.get('/info', function (req, res) {
-	if (req.session.user) {
-		var user = req.session.user;
-		res.json({
-			user: user
-		})
-	} else {
-		res.json({
-			error: '未登录'
-		})
-	}
-})
-
-
-app.get('/aaa', function (req, res) {
-	throw new Error('oh no!')
-})
-
-// error handler
-app.use(function (err, req, res, next) {
-	res.status(err.status || 500);
-	res.json({
-		errmsg: err.message
-	})
-});
-
-var connection = mysql.createConnection(config.db)
-
-console.log(config.db)
-
-var server = app.listen(config.port, function () {
+var server = app.listen(config.port, () => {
 	var host = server.address().address;
 	var port = server.address().port;
-
-
 	console.log('Example app listening at http://%s:%s', host, port);
 });

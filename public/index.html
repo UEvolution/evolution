@@ -19,7 +19,7 @@
 		$.ajax({
 			type: 'GET',
 			dataType: "json",
-			url: '/aaa',
+			url: '/user/info',
 			success: function(res) {
 				console.log(res)
 			}
@@ -29,7 +29,7 @@
 			$.ajax({
 				type: 'POST',
 				dataType: "json",
-				url: '/login',
+				url: '/user/login',
 				data: {
 					name: $('#name').val(),
 					password: $('#pwd').val()
