@@ -52,6 +52,18 @@ app.get('/info', function (req, res) {
 })
 
 
+app.get('/aaa', function (req, res) {
+	throw new Error('oh no!')
+})
+
+// error handler
+app.use(function (err, req, res, next) {
+	res.status(err.status || 500);
+	res.json({
+		errmsg: err.message
+	})
+});
+
 var connection = mysql.createConnection(config.db)
 
 console.log(config.db)
