@@ -29,6 +29,13 @@ app.use(session({
 
 app.use('/user', user)
 
+app.use((err, req, res, next) => {
+	res.status(err.status || 500)
+	res.json({
+		msg: err.message
+	})
+})
+
 var server = app.listen(config.port, () => {
 	var host = server.address().address;
 	var port = server.address().port;

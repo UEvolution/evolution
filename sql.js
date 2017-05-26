@@ -6,20 +6,7 @@ function query(sql, callback) {
 	pool.getConnection(function (err, connection) {
 		// Use the connection
 		connection.query(sql, function (err, rows) {
-			var result;
-			if (typeof rows === 'undefined') {
-				result = {
-					code: '100',
-					msg: err.code
-				};
-			} else {
-				result = {
-					code: '200',
-					msg: '操作成功',
-					data: rows
-				};
-			}
-			callback(result);
+			callback(err, rows);
 			connection.release(); //释放链接
 		});
 	});
