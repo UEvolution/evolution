@@ -18,16 +18,16 @@ var responseJSON = function (res, ret, msg) {
 };
 
 router.get('/aaa', (req, res) => {
-	sql.query('select name,password from user', function (err, result) {
+	sql.query('select username,password from user', function (err, result) {
 		res.json(result)
 	})
 })
 
 router.post('/login', (req, res) => {
-	var name = req.body.name;
+	var name = req.body.username;
 	var pwd = req.body.password;
 
-	sql.query('select name,password from user where name="' + name + '" and password="' + pwd + '"', function (err, result) {
+	sql.query('select username,password from user where username="' + name + '" and password="' + pwd + '"', function (err, result) {
 		res.json(result)
 	})
 })
