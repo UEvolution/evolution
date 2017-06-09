@@ -12,18 +12,21 @@
 	账户<input type="text" id="name"> 密码
 	<input type="password" id="pwd">
 	<button id="login">登录</button>
+	<button id="info">登录信息</button>
 
 	<script type="text/javascript">
-		var login = $('#login')
+		var login = $('#login'),
+			info = $('#info'),
+			token;
 
-		$.ajax({
-			type: 'GET',
-			dataType: "json",
-			url: '/user/info',
-			success: function(res) {
-				console.log(res)
-			}
-		})
+//		$.ajax({
+//			type: 'GET',
+//			dataType: "json",
+//			url: '/user/info',
+//			success: function(res) {
+//				console.log(res)
+//			}
+//		})
 
 		login.on('click', function() {
 			$.ajax({
@@ -34,8 +37,24 @@
 					username: $('#name').val(),
 					password: $('#pwd').val()
 				},
-				success: function() {
+				success: function(r) {
+					if (r.data) {
+						token = r.data.token;
+					}
+				}
+			})
+		})
 
+		info.on('click', function() {
+			$.ajax({
+				type: 'POST',
+				dataType: "json",
+				url: '/user/info',
+				data: {
+					token: token
+				},
+				success: function(res) {
+					console.log(res)
 				}
 			})
 		})

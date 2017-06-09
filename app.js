@@ -7,6 +7,7 @@ var multer = require('multer')
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var user = require('./routers/user')
+var article = require('./routers/article')
 
 
 app.use(bodyParser.json());
@@ -27,7 +28,8 @@ app.use(session({
 	saveUninitialized: true
 }));
 
-app.use('/user', user)
+app.use('/manage/user', user)
+app.use('/manage/article', article)
 
 app.use((err, req, res, next) => {
 	res.status(err.status || 500)
