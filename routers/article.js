@@ -12,22 +12,18 @@ router.post('/view', (req, res) => {
 	let id = req.body.id;
 
 	if (id) {
-		if (code == 1111) {
-			util.query({
-				sql: 'select * from articles where status=1 and id=?',
-				values: [id]
-			}, (err, result) => {
-				if (err) {
-					throw err
-					return
-				}
-				util.resJSON(res, result)
-			})
-		} else {
-			util.resMsg(res, '验证码错误')
-		}
+		util.query({
+			sql: 'select * from articles where status=1 and id=?',
+			values: [id]
+		}, (err, result) => {
+			if (err) {
+				throw err
+				return
+			}
+			util.resJSON(res, result)
+		})
 	} else {
-		util.resMsg(res, '用户名和密码不能为空')
+		util.resMsg(res, 'id不能为空')
 	}
 
 })

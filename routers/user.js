@@ -14,7 +14,7 @@ router.post('/checkname', (req, res) => {
 	let name = req.body.username;
 
 	util.query({
-		sql: 'select username from user where username=?',
+		sql: 'select username from user where username=? and status=1',
 		values: [name]
 	}, (err, result) => {
 		if (result && result.length > 0) {
@@ -67,7 +67,7 @@ router.post('/login', (req, res) => {
 	let pwd = req.body.password;
 
 	util.query({
-		sql: 'select id,username,email,truename from user where username=? and password=?',
+		sql: 'select id,username,email,truename from user where username=? and password=? and status=1',
 		values: [name, pwd]
 	}, (err, result) => {
 		//		res.json(result)
@@ -134,7 +134,7 @@ router.post('/update', (req, res) => {
 
 	if (uid) {
 		util.query({
-			sql: 'update user set email=?,updatetime=? where id=?',
+			sql: 'update user set email=?,updatetime=? where id=? and status=1',
 			values: [email, new Date(), uid]
 		}, (err, result) => {
 			if (err) {
