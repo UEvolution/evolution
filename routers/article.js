@@ -3,9 +3,40 @@ const router = express.Router()
 const util = require('../util')
 
 router.post('/list', (req, res) => {
-	util.query('select * from articles where status=1', (err, result) => {
-		util.resJSON(res, result)
+	let pageindex = req.body.pageindex
+	let pagenum = req.body.pagenum
+
+	util.query('select COUNT(*) as count from articles where status=1', (err, result1) => {
+		if (err) {
+			throw new Error(err.code)
+		}
+		if (result1[0].count > 0) {
+			util.query({
+				sql: 'select * from articles where status=1 limit ?,?',
+				values: [Math.floor((pageindex - 1) * pagenum), Math.floor(pagenum)]
+			}, (err, result2) => {
+				if (err) {
+					console.log(err.code);
+				}
+				res.json({
+					code: '200',
+					pageindex: pageindex,
+					pagenum: pagenum,
+					total: result1[0].count,
+					data: result2
+				})
+			})
+		} else {
+			res.json({
+				code: '200',
+				pageindex: pageindex,
+				pagenum: pagenum,
+				total: result1[0].count,
+				data: []
+			})
+		}
 	})
+
 })
 
 router.post('/view', (req, res) => {
