@@ -1,51 +1,45 @@
-var express = require('express')
-var router = express.Router()
-var sql = require('../sql')
-
-var responseJSON = function (res, ret, msg) {
-	var dataobj;
-	if (typeof ret === 'undefined') {
-		res.json({
-			code: '100',
-			msg: '操作失败'
-		});
-	} else {
-		res.json({
-			code: '200',
-			msg: '',
-		});
-	}
-};
+const express = require('express')
+const router = express.Router()
+const util = require('../util')
+const fs = require('fs')
+const jwt = require('jsonwebtoken')
 
 router.get('/aaa', (req, res) => {
-	sql.query('select username,password from user', function (err, result) {
+	util.query('select username,password from user', (err, result) => {
 		res.json(result)
 	})
 })
 
 router.post('/login', (req, res) => {
-	var name = req.body.username;
-	var pwd = req.body.password;
+	let name = req.body.username;
+	let pwd = req.body.password;
 
-	sql.query('select username,password from user where username="' + name + '" and password="' + pwd + '"', function (err, result) {
-		res.json(result)
+	util.query({
+		sql: 'select username,password from user where username=? and password=?',
+		values: [name, pwd]
+	}, (err, result) => {
+		//		res.json(result)
+		req.session.user = result
+
+		var cert = fs.readFileSync('./shaw_rsa')
+		var token = jwt.sign(result[0], cert, {
+			algorithm: 'RS256'
+		})
+
+		console.log(token);
+
+		util.resJSON(res, result)
 	})
 })
 
 router.get('/info', (req, res) => {
 	if (req.session.user) {
-		var user = req.session.user;
-		res.json({
-			code: '200',
-			msg: '操作成功',
-			data: user
-		})
+		let user = req.session.user;
+		util.resJSON(res, user)
 	} else {
-		res.json({
-			code: '100',
-			error: '未登录'
-		})
+		util.resMsg(res, '未登录')
 	}
 })
+
 
 module.exports = router
