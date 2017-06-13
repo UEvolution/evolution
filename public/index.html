@@ -5,6 +5,7 @@
 	<meta charset="UTF-8">
 	<title>Document</title>
 	<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+	<script src="gt.js"></script>
 </head>
 
 <body>
@@ -13,20 +14,42 @@
 	<input type="password" id="pwd">
 	<button id="login">登录</button>
 	<button id="info">登录信息</button>
+	<div id="captcha-box"></div>
 
 	<script type="text/javascript">
 		var login = $('#login'),
 			info = $('#info'),
 			token;
 
-//		$.ajax({
-//			type: 'GET',
-//			dataType: "json",
-//			url: '/user/info',
-//			success: function(res) {
-//				console.log(res)
-//			}
-//		})
+		$.ajax({
+			type: 'GET',
+			dataType: "json",
+			url: '/manage/user/regcaptcha',
+			success: function(res) {
+				console.log(res)
+				var data = res;
+				initGeetest({
+					// 以下配置参数来自服务端 SDK
+					gt: data.gt,
+					challenge: data.challenge,
+					offline: !data.success,
+					new_captcha: data.new_captcha
+				}, function(captchaObj) {
+					// 这里可以调用验证实例 captchaObj 的实例方法
+					captchaObj.appendTo('#captcha-box');
+
+					captchaObj.onSuccess(function() {
+						console.log('验证成功')
+					})
+					
+					captchaObj.onError(function(){
+						console.log('验证失败')
+					})
+
+				})
+
+			}
+		})
 
 		login.on('click', function() {
 			$.ajax({
