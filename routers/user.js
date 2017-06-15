@@ -157,7 +157,7 @@ router.post('/info', (req, res) => {
 				util.resJSON(res, decoded)
 			} else {
 				res.json({
-					code: '402',
+					code: '100',
 					msg: '未登录'
 				});
 			}

@@ -58,3 +58,11 @@ typings/
 .env
 
 config.js
+redis/dump.rdb
+redis/libhiredis.dll
+redis/redis-benchmark.exe
+redis/redis-check-aof.exe
+redis/redis-check-dump.exe
+redis/redis-cli.exe
+redis/redis-server.exe
+redis/redis.conf

@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const util = require('../util')
 
-router.post('/list', (req, res) => {
+router.post('/list', util.cacheRouter((req, res) => {
 	let pageindex = req.body.pageindex
 	let pagenum = req.body.pagenum
 
@@ -37,7 +37,7 @@ router.post('/list', (req, res) => {
 		}
 	})
 
-})
+}))
 
 router.post('/view', (req, res) => {
 	let id = req.body.id;
