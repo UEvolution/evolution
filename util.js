@@ -16,7 +16,7 @@ var util = {
 	cacheRouter: (fn, t) => {
 		var expiredTime = t || 60;
 		return function (req, res, next) {
-			var send = res.send;
+			var send = res.json;
 
 			var method = req.method;
 			var url = req.url;
@@ -44,10 +44,10 @@ var util = {
 
 					console.log('Read data from redis.');
 			
-					return res.send(data);
+					return res.json(data);
 				}
 
-				res.send = function (data) {
+				res.json = function (data) {
 					redisQueue.setex(key, expiredTime, JSON.stringify(data));
 					return send.call(this, data);
 				}

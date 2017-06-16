@@ -3,8 +3,8 @@ const router = express.Router()
 const util = require('../util')
 
 router.post('/list', util.cacheRouter((req, res) => {
-	let pageindex = req.body.pageindex
-	let pagenum = req.body.pagenum
+	let pageindex = req.body.pageindex || 1
+	let pagenum = req.body.pagenum || 10
 
 	util.query('select COUNT(*) as count from articles where status=1', (err, result1) => {
 		if (err) {
